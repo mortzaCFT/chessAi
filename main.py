@@ -1,3 +1,6 @@
+# This is under develompent...
+# So,.. it not complated yet...
+# ...
 from Board import Board
 from core import chess_detector
 import cv2
@@ -18,8 +21,8 @@ def main():
         chess_detector.detect_chessboard(frame)
         chess_detector.detect_pieces(frame)
 
+        #Updating board:
         board.update_board(chess_detector.piece_locations)
-
         # ... Perform analysis or any other tasks using the updated board ...
 
         cv2.imshow("Chess Detection", frame)
