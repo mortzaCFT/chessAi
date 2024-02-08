@@ -6,3 +6,7 @@ _After that it's match the chess pieces and the locations on the board._
 ........
 _and in the end it's analyze the board and give you suggestation on the board(like best move,the enemy level,who can win this match,......_
 _Like a chess app on the phone, but! in reallity!)._
+
+_-Still under development....-_
+If you interested in this, give me message on discord, i will happy to share it:
+mortza#3700
