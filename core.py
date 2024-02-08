@@ -1,5 +1,3 @@
-#  Core detecton using yolov5.
-#  This is simply get all needed objects in a board.
 import cv2
 import numpy as np
 import torch
@@ -41,21 +39,22 @@ class ChessDetector:
 
     def set_default_locations(self):
         # Set the default locations for the chess pieces
-        self.piece_locations['king'] = (4, 0)
-        self.piece_locations['queen'] = (3, 0)
+        self.piece_locations['king']    = (4, 0)
+        self.piece_locations['queen']   = (3, 0)
         self.piece_locations['bishop1'] = (2, 0)
         self.piece_locations['bishop2'] = (5, 0)
         self.piece_locations['knight1'] = (1, 0)
         self.piece_locations['knight2'] = (6, 0)
-        self.piece_locations['rook1'] = (0, 0)
-        self.piece_locations['rook2'] = (7, 0)
+        self.piece_locations['rook1']   = (0, 0)
+        self.piece_locations['rook2']   = (7, 0)
+        #For other pawn :
         for i in range(8):
             self.piece_locations[f'pawn{i+1}'] = (i, 1)
 
     def set_player_color(self):
         while True:
             try:
-                color = input("Enter your chess piece color (white/black): ").lower()
+                color = input("Enter your chess piece color (white/black): ").lower() 
                 if color not in ['white', 'black']:
                     raise ValueError("Invalid input! Please enter 'white' or 'black'.")
                 self.player_color = color
