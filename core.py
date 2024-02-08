@@ -67,6 +67,7 @@ if __name__ == "__main__":
     webcam = cv2.VideoCapture(0)  
     
     # Load the YOLOv5 model
+    # path the weghts of yolov5...
     piece_weights_path = "<path_to_yolov5_weights>"
     chess_detector = ChessDetector(piece_weights_path)
     
