@@ -1,3 +1,22 @@
+# CORE_VERSION : "0.0.0.0"
+
+# =--=
+# Whats new:
+# Generally removing some functions, that they wasn't nessecery.
+# Also some editing in deteting chess_board and the chess_pieces.
+# The algorithm of the program changes. Now we just detect grid of the chess_board.
+# We are no longer using yolov5 anymore.It's doesnt req with new algorithm.
+# =--=
+# Suggestion for updating:
+# Let user fix any pieces the simple detector gets wrong. It's will help for any bug(since we have changed the algorithm)
+# Infer the piece locations from the board state history.
+# Limit pieces to pre-defined regions. Detect the board grid, define regions like "white pieces must be in rows 1-2"
+# 
+# =--=
+# Creator : mortzaCFT
+# Address : https://github.com/mortzaCFT
+# Discord : mortza#3700 
+
 import cv2
 import numpy as np
 import torch
