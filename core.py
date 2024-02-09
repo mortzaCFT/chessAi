@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import torch
 from Board import Board
+import yolov5 as yolo
 
 class ChessDetector:
    
@@ -13,10 +14,12 @@ class ChessDetector:
         self.model = torch.hub.load('ultralytics/yolov5', 'custom', path=self.piece_weights_path)
 
     def detect_chessboard(self, frame):
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        ret, corners = cv2.findChessboardCorners(gray, (8, 8), None)
-        if ret:
-            self.chessboard_corners = corners
+     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+     gray = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
+     ret, corners = cv2.findChessboardCorners(gray, (8, 8), None)
+     if ret:
+         self.chessboard_corners = corners
+
 
     def detect_pieces(self, frame):
         
@@ -62,9 +65,11 @@ class ChessDetector:
             except ValueError as e:
                 print(e)
 
+
 if __name__ == "__main__":
+
     webcam = cv2.VideoCapture(0)  
-    
+
     # Load the YOLOv5 model
     piece_weights_path = "<path_to_yolov5_weights>"
     chess_detector = ChessDetector(piece_weights_path)
