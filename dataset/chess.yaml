@@ -1,0 +1,10 @@
+path : dataset
+train: <name of your group images(like class)>
+val: <name your value images.>
+
+nc: <number of classes>
+names: [ "<name of your objects>",...]
+
+
+
+# python train.py --img 640 --batch 16 --epochs 5 --data <name of your cocotrain.yaml file> --weights yolov5s.pt
