@@ -40,19 +40,21 @@ class ChessDetector:
             if piece_name in known_pieces:
                 self.piece_locations[piece_name] = (xmin, ymin, xmax, ymax)
 
-    def set_default_locations(self):
+# Set default locaion is not matter now
+#The program is running on the real time,...
+   # def set_default_locations(self):
         # Set the default locations for the chess pieces
-        self.piece_locations['king']    = (4, 0)
-        self.piece_locations['queen']   = (3, 0)
-        self.piece_locations['bishop1'] = (2, 0)
-        self.piece_locations['bishop2'] = (5, 0)
-        self.piece_locations['knight1'] = (1, 0)
-        self.piece_locations['knight2'] = (6, 0)
-        self.piece_locations['rook1']   = (0, 0)
-        self.piece_locations['rook2']   = (7, 0)
+    #    self.piece_locations['king']    = (4, 0)
+    #    self.piece_locations['queen']   = (3, 0)
+    #    self.piece_locations['bishop1'] = (2, 0)
+    #    self.piece_locations['bishop2'] = (5, 0)
+    #    self.piece_locations['knight1'] = (1, 0)
+    #    self.piece_locations['knight2'] = (6, 0)
+    #    self.piece_locations['rook1']   = (0, 0)
+    #    self.piece_locations['rook2']   = (7, 0)
         #For other pawn :
-        for i in range(8):
-            self.piece_locations[f'pawn{i+1}'] = (i, 1)
+    #    for i in range(8):
+     #       self.piece_locations[f'pawn{i+1}'] = (i, 1)
 
     def set_player_color(self):
         while True:
