@@ -73,13 +73,29 @@ class ChessDetector:
     #    for i in range(8):
      #       self.piece_locations[f'pawn{i+1}'] = (i, 1)
 
-#Detecting,...board.
-    def detect_chessboard(self,frame):
-        gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+#Detecting,... board.
+    def detect_chessboard(self, frame):
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         gray = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
-        ret, corners = cv2.findChessboardCorners(gray,(8,8), None)
+        ret, corners = cv2.findChessboardCorners(gray, (8, 8), None)
+
         if ret:
             self.chessboard_corners = corners
+            # Divide the chessboard into cells (rectangles)
+            cell_width = int(corners[1][0][0] - corners[0][0][0])
+            cell_height = int(corners[8][0][1] - corners[0][0][1])
+            grid_cells = []
+            for i in range(8):
+                for j in range(8):
+                    x1 = int(corners[i * 8 + j][0][0])
+                    y1 = int(corners[i * 8 + j][0][1])
+                    x2 = x1 + cell_width
+                    y2 = y1 + cell_height
+                    grid_cells.append(((x1, y1), (x2, y2)))
+
+            return grid_cells
+        else:
+            return None
 
 
     
@@ -162,6 +178,10 @@ class ChessDetector:
             x, y = location
             square = chess.square(x, y)
             piece_type = self.get_chess_piece_type(piece)
+            grid_cells = core.detect_chessboard(frame) 
+            if grid_cells:
+               print(f"Detected {len(grid_cells)} grid cells.")
+            
             chess_piece = chess.Piece(piece_type, color)
             self.board.set_piece_at(square, chess_piece)
         
@@ -177,15 +197,20 @@ if __name__ == "__main__":
     
     while True:
         ret, frame = webcam.read()  
-        
-
         cv2.imshow("Chess Detection", frame)
         
-        
-        core = ChessDetector()
-        #Setting up the board :
-        core.set_color()  
 
+        #Setting up the board :
+        core = ChessDetector()
+        core.set_color()  
+        core.detect_chessboard(frame)
+
+        #Getting output:
+        if core.detect_chessboard.grid_cells:
+         print(f"Detected {len(core.grid_cells)} grid cells.")
+        # Pass grid_cells to your update_board function
+        else:
+         print("Chessboard not detected.")
         core.update_board()
         
         
