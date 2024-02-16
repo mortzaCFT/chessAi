@@ -118,11 +118,16 @@ class ChessDetector:
         return piece_map.get(piece_locations, chess.PAWN)
 
 
-    #Updating location of the chess pieces
-    def update_board(self, grid_cells):
+   #Updating location of the chess pieces
+def update_board(self, grid_cells):
+    self.board = chess.Board()
+    self.set_default_locations()
 
-        for piece, location in self.piece_locations.items():
-         x, y = location
+    # Create a dictionary to store the mapped square for each piece
+    piece_squares = {}
+
+    for piece, location in self.piece_locations.items():
+        x, y = location
 
         # Find the grid cell containing the piece
         for cell in grid_cells:
@@ -131,21 +136,31 @@ class ChessDetector:
                 square = chess.square(x, y)
                 piece_type = self.get_chess_piece_type(piece)
 
+                # Store the mapped square for the piece
+                piece_squares[piece] = square
+
                 # Deploy player pieces in real time
                 player_color_int = chess.WHITE if self.player_color == 'white' else chess.BLACK
                 player_chess_piece = chess.Piece(piece_type, player_color_int)
                 self.board.set_piece_at(square, player_chess_piece)
 
-                # Deploy enemy pieces in real time
-                enemy_color_int = chess.BLACK if self.player_color == 'white' else chess.WHITE
-                for enemy_piece, enemy_location in self.enemy_piece_locations.items():
-                    enemy_x, enemy_y = enemy_location
-                    enemy_square = chess.square(enemy_x, enemy_y)
-                    enemy_piece_type = self.get_chess_piece_type(enemy_piece)
-                    enemy_chess_piece = chess.Piece(enemy_piece_type, enemy_color_int)
-                    self.board.set_piece_at(enemy_square, enemy_chess_piece)
+                break
+     
+        # Deploy enemy pieces in real time
+        enemy_color_int = chess.BLACK if self.player_color == 'white' else chess.WHITE
+        for enemy_piece, enemy_location in self.enemy_piece_locations.items():
+          enemy_x, enemy_y = enemy_location
+          enemy_square = chess.square(enemy_x, enemy_y)
+          enemy_piece_type = self.get_chess_piece_type(enemy_piece)
 
-                break 
+        # Check if the enemy piece is in the piece_squares dictionary
+        if enemy_piece in piece_squares:
+        # Remove the player piece from its mapped square
+         self.board.remove_piece_at(piece_squares[enemy_piece])
+         enemy_chess_piece = chess.Piece(enemy_piece_type, enemy_color_int)
+         self.board.set_piece_at(enemy_square, enemy_chess_piece)
+
+
      #Old one
      #self.board = chess.Board()
      #self.set_default_locations()
