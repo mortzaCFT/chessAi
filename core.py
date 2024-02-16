@@ -1,4 +1,4 @@
-# CORE_VERSION : "0.0.0.0"
+# CORE_VERSION : "0.0.2.0"
 
 # =--=
 # Whats new:
