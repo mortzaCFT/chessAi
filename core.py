@@ -1,4 +1,4 @@
-# CORE_VERSION : "0.0.0.1"
+# CORE_VERSION : "0.0.0.0"
 
 # =--=
 # Whats new:
@@ -120,18 +120,53 @@ class ChessDetector:
 
     #Updating location of the chess pieces
     def update_board(self, grid_cells):
-     self.board = chess.Board()
-     self.set_default_locations()
 
-     for piece, location in self.piece_locations.items():
+        for piece, location in self.piece_locations.items():
          x, y = location
-         square = chess.square(x, y)
-         piece_type = self.get_chess_piece_type(piece)
-         color_int = chess.WHITE if self.player_color == 'white' else chess.BLACK
-         chess_piece = chess.Piece(piece_type, color_int)
-         self.board.set_piece_at(square, chess_piece)
-            
-         self.board.clear()
+
+        # Find the grid cell containing the piece
+        for cell in grid_cells:
+            (x1, y1), (x2, y2) = cell
+            if x1 <= x <= x2 and y1 <= y <= y2:
+                square = chess.square(x, y)
+                piece_type = self.get_chess_piece_type(piece)
+
+                # Deploy player pieces in real time
+                player_color_int = chess.WHITE if self.player_color == 'white' else chess.BLACK
+                player_chess_piece = chess.Piece(piece_type, player_color_int)
+                self.board.set_piece_at(square, player_chess_piece)
+
+                # Deploy enemy pieces in real time
+                enemy_color_int = chess.BLACK if self.player_color == 'white' else chess.WHITE
+                for enemy_piece, enemy_location in self.enemy_piece_locations.items():
+                    enemy_x, enemy_y = enemy_location
+                    enemy_square = chess.square(enemy_x, enemy_y)
+                    enemy_piece_type = self.get_chess_piece_type(enemy_piece)
+                    enemy_chess_piece = chess.Piece(enemy_piece_type, enemy_color_int)
+                    self.board.set_piece_at(enemy_square, enemy_chess_piece)
+
+                break 
+     #Old one
+     #self.board = chess.Board()
+     #self.set_default_locations()
+
+     #for piece, location in self.piece_locations.items():
+      #  x, y = location
+       # square = chess.square(x, y)
+        #piece_type = self.get_chess_piece_type(piece)
+
+        #Deploy real time the player piece 
+        #player_color_int = chess.WHITE if self.player_color == 'white' else chess.BLACK
+        #for piece, location in self.piece_locations.items():
+         # player_chess_piece = chess.Piece(piece_type, player_color_int)
+          #self.board.set_piece_at(square,player_chess_piece)
+
+
+        #Deploy real time the player piece 
+        #enemy_color_int = chess.BLACK if self.player_color == 'white' else chess.WHITE
+        #for piece, location in self.enemy_piece_locations.items():
+         # enemy_chess_piece = chess.Piece(piece_type, enemy_color_int)
+          #self.board.set_piece_at(square, enemy_chess_piece) 
 
 if __name__ == "__main__":
 
