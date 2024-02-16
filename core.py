@@ -118,7 +118,7 @@ class ChessDetector:
         return piece_map.get(piece_locations, chess.PAWN)
 
 
-#Updating location of the chess pieces
+# Updating location of the chess pieces
 def update_board(self, grid_cells):
     #Set up that shit board.
     self.board = chess.Board()
@@ -166,8 +166,7 @@ def update_board(self, grid_cells):
         enemy_chess_piece = chess.Piece(enemy_piece_type, enemy_color_int)
         self.board.set_piece_at(enemy_square, enemy_chess_piece)
 
-
-     #Old one
+     #Old one=---------------------------------------------------------------------------
      #self.board = chess.Board()
      #self.set_default_locations()
 
@@ -188,40 +187,4 @@ def update_board(self, grid_cells):
         #for piece, location in self.enemy_piece_locations.items():
          # enemy_chess_piece = chess.Piece(piece_type, enemy_color_int)
           #self.board.set_piece_at(square, enemy_chess_piece) 
-
-if __name__ == "__main__":
-
-    webcam = cv2.VideoCapture(0)  
-
-    #OLD one
-    # Load the YOLOv5 model
-    # piece_weights_path = "<path_to_yolov5_weights>"
-    #chess_detector = ChessDetector(piece_weights_path)
-    
-    while True:
-        ret, frame = webcam.read()  
-        cv2.imshow("Chess Detection", frame)
-        
-
-        #Setting up the board :
-        core = ChessDetector()
-        core.set_color()  
-        grid_cells = core.detect_chessboard(frame)
-
-        #Getting output:
-        if grid_cells is not None:
-          print(f"Detected {len(grid_cells)} grid cells.")
-          core.update_board(grid_cells)  # Pass grid_cells here
-        else:
-           print("Chessboard not detected.")
-
-        #Comminicate with stockfish...
-        #Getting respound from stockfish:
-
-
-        # This proces can break the loop:
-        if cv2.waitKey(1) & 0xFF == ord('q'):  
-            break
-    
-    webcam.release()
-    cv2.destroyAllWindows()
+    #-------------------------------------------------------------------------------------
