@@ -1,11 +1,17 @@
-# This script is under development:
-# This class can connect the chess_engine and the main applicaion,
-#in order for get suggestion from xboard or UCI chess engines.
-#The algorithm is seems simple,but it's don't working(i don't know enough informaion,...)
+#  Notes:
+#   1. StckFish uci engine choosen.  ....DONE....
+#   2. Get realation the engine and core to get test result. ....MARKED....
+#   3.
 
-from Board import Board
+
 from core import chess_detector
 from main import main
+
+
+# Settting up stockfish: 
+from stockfish import Stockfish
+stockfish = Stockfish(path="stockfish/stockfish-windows-x86-64.exe")
+
 
 class chess_engine:
  
