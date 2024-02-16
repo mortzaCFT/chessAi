@@ -1,40 +1,45 @@
 # This is under develompent...
 # So,.. it not complated yet...
 # ...
-from core import chess_detector
+from core import ChessDetector
 import cv2
 import numpy
 from Analyze import chess_engine
 
+
 def main():
-    webcam = cv2.VideoCapture(0)
-    piece_weights_path = "<path_to_yolov5_weights>"
 
-    chess_detector = ChessDetector(piece_weights_path)
-    board = Board()
-    board.initialize_board()
-
+    webcam = cv2.VideoCapture(0)  
+    
+    core = ChessDetector()
+    core.set_color()  
+    
     while True:
-        ret, frame = webcam.read()
-
-        chess_detector.detect_chessboard(frame)
-        chess_detector.detect_pieces(frame)
-
-        #Updating board:
-        board.update_board(chess_detector.piece_locations)
-        # ... Perform analysis or any other tasks using the updated board ...
-
+        ret, frame = webcam.read()  
         cv2.imshow("Chess Detection", frame)
+        
+        #Setting up the board :
+        grid_cells = core.detect_chessboard(frame)
 
-        if chess_detector.player_color is None:
-            chess_detector.set_player_color()
+        #Getting output:
+        if grid_cells is not None:
+          print(f"Detected {len(grid_cells)} grid cells.")
+          core.update_board(grid_cells)  # Pass grid_cells here
+        else:
+           print("Chessboard not detected.")
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        #Comminicate with stockfish...
+        #Getting respound from stockfish:
+
+
+        # This proces can break the loop:
+        if cv2.waitKey(1) & 0xFF == ord('q'):  
             break
-
+    
     webcam.release()
     cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
     main()
+   
