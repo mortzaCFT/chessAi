@@ -1,4 +1,4 @@
-# CORE_VERSION : "0.0.0.0"
+# CORE_VERSION : "0.0.0.1"
 
 # =--=
 # Whats new:
@@ -22,58 +22,12 @@ import numpy as np
 import chess
 
 class ChessDetector:
-   
+    
     def __init__(self):
         self.chessboard_corners = None
         self.piece_locations = {}
-        self.player_color 
-    #OLD one using yolo for detecting pieces.
-      #  self.model = torch.hub.load('ultralytics/yolov5', 'custom', path=self.piece_weights_path)
 
-#The old detection using yolov5 models.
-    #def detect_chessboard(self, frame):
-     #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-     #gray = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
-     #ret, corners = cv2.findChessboardCorners(gray, (8, 8), None)
-     #if ret:
-      #   self.chessboard_corners = corners
-
-    #def detect_pieces(self, frame):
-        
-    #    img = letterbox(frame, new_shape=self.model.img_size)
-
-     #   results = self.model(img)
-
-        
-      #  labels = results.pandas().xyxy[0]['name']
-       # boxes = results.pandas().xyxy[0][['xmin', 'ymin', 'xmax', 'ymax']]
-
-        #known_pieces = set(['king', 'queen', 'bishop', 'knight', 'rook', 'pawn'])
-        # Assign the piece names to the piece_locations dictionary
-        #for label, box in zip(labels, boxes):
-         #   xmin, ymin, xmax, ymax = box
-          #  piece_name = label
-
-           # if piece_name in known_pieces:
-            #    self.piece_locations[piece_name] = (xmin, ymin, xmax, ymax)
-
-# Set default locaion is not matter now
-#The program is running on the real time,...
-   # def set_default_locations(self):
-        # Set the default locations for the chess pieces
-    #    self.piece_locations['king']    = (4, 0)
-    #    self.piece_locations['queen']   = (3, 0)
-    #    self.piece_locations['bishop1'] = (2, 0)
-    #    self.piece_locations['bishop2'] = (5, 0)
-    #    self.piece_locations['knight1'] = (1, 0)
-    #    self.piece_locations['knight2'] = (6, 0)
-    #    self.piece_locations['rook1']   = (0, 0)
-    #    self.piece_locations['rook2']   = (7, 0)
-        #For other pawn :
-    #    for i in range(8):
-     #       self.piece_locations[f'pawn{i+1}'] = (i, 1)
-
-#Detecting,... board.
+    #Detecting,... board.
     def detect_chessboard(self, frame):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         gray = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
@@ -97,12 +51,10 @@ class ChessDetector:
         else:
             return None
 
-
     
-
-#Set up the board 
+    #Set up the board 
     def set_default_locations(self):
-        #For player color:
+        #For player color white:
         if self.player_color == 'white': 
          self.piece_locations['king']    = (4, 0)
          self.piece_locations['queen']   = (3, 0)
@@ -114,7 +66,7 @@ class ChessDetector:
          self.piece_locations['rook2']   = (7, 0)
          for i in range(8):
              self.piece_locations[f'pawn{i+1}'] = (i, 1)
-
+        #For player color black:
         if self.player_color == 'black':
          self.piece_locations['king']    = (4, 7)
          self.piece_locations['queen']   = (3, 7)
@@ -166,31 +118,26 @@ class ChessDetector:
         return piece_map.get(piece_locations, chess.PAWN)
 
 
+    #Updating location of the chess pieces
+    def update_board(self, grid_cells):
+     self.board = chess.Board()
+     self.set_default_locations()
 
-#Updating location of the chess pieces
-    def update_board(self, piece_locations):
-        self.board = chess.Board()
-        self.set_default_locations()
-        self.board.clear()
-       
-        # Map the detected piece locations to squares on the board
-        for piece, location in self.piece_locations.items():
-            x, y = location
-            square = chess.square(x, y)
-            piece_type = self.get_chess_piece_type(piece)
-            grid_cells = core.detect_chessboard(frame) 
-            if grid_cells:
-               print(f"Detected {len(grid_cells)} grid cells.")
+     for piece, location in self.piece_locations.items():
+         x, y = location
+         square = chess.square(x, y)
+         piece_type = self.get_chess_piece_type(piece)
+         color_int = chess.WHITE if self.player_color == 'white' else chess.BLACK
+         chess_piece = chess.Piece(piece_type, color_int)
+         self.board.set_piece_at(square, chess_piece)
             
-            chess_piece = chess.Piece(piece_type, color)
-            self.board.set_piece_at(square, chess_piece)
-        
+         self.board.clear()
 
 if __name__ == "__main__":
 
     webcam = cv2.VideoCapture(0)  
 
-#OLD one
+    #OLD one
     # Load the YOLOv5 model
     # piece_weights_path = "<path_to_yolov5_weights>"
     #chess_detector = ChessDetector(piece_weights_path)
@@ -203,17 +150,20 @@ if __name__ == "__main__":
         #Setting up the board :
         core = ChessDetector()
         core.set_color()  
-        core.detect_chessboard(frame)
+        grid_cells = core.detect_chessboard(frame)
 
         #Getting output:
-        if core.detect_chessboard.grid_cells:
-         print(f"Detected {len(core.grid_cells)} grid cells.")
-        # Pass grid_cells to your update_board function
+        if grid_cells is not None:
+          print(f"Detected {len(grid_cells)} grid cells.")
+          core.update_board(grid_cells)  # Pass grid_cells here
         else:
-         print("Chessboard not detected.")
-        core.update_board()
-        
-        
+           print("Chessboard not detected.")
+
+        #Comminicate with stockfish...
+        #Getting respound from stockfish:
+
+
+        # This proces can break the loop:
         if cv2.waitKey(1) & 0xFF == ord('q'):  
             break
     
